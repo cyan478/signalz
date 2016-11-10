@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <signal.h>
 
 static void sighandler(int sig){
 	if (sig == SIGINT){
+		int fd = open("file", O_CREAT|O_RDWR|O_APPEND, 0644);
+		char msg[] = "Program exited due to SIGINT \n";
+        write(fd, msg, sizeof(msg));
+        close(fd);
 		printf("Exited due to SIGINT \n");
 		exit(0);
 	}
@@ -14,6 +21,7 @@ static void sighandler(int sig){
 }
 
 int main(){
+	umask(0000);
 	signal(SIGINT,sighandler);
 	signal(SIGUSR1,sighandler);
 

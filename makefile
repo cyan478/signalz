@@ -6,3 +6,4 @@ run: sigtest
 
 clean:
 	rm sigtest
+	rm file
